@@ -1,0 +1,75 @@
+<!doctype html>
+<!-- Google Font: 'Inter', 400,700 -->
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Niyantri Coffee - Menu</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-amber-100 to-amber-50 min-h-screen text-stone-900">
+  <header class="w-full bg-amber-900 text-white">
+    <nav class="flex items-center justify-between px-6 py-4">
+      <a href="./index.html" class="text-2xl font-bold tracking-wide">Niyantri Coffee</a>
+      <ul class="flex gap-6 font-medium">
+        <li><a href="./index.html" class="hover:underline">Home</a></li>
+        <li><a href="./menu.html" class="hover:underline">Menu</a></li>
+        <li><a href="./cart.html" class="hover:underline">Cart</a></li>
+        <li><a href="./about.html" class="hover:underline">About</a></li>
+        <li><a href="./contact.html" class="hover:underline">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="w-full px-6 py-12">
+    <section class="mb-6">
+      <h2 class="text-3xl font-extrabold mb-4">Our Menu</h2>
+      <p class="text-gray-700">Default menu items crafted for a classic coffee experience. Add items to your cart and checkout with PayPal.</p>
+    </section>
+
+    <section id="menu-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></section>
+  </main>
+
+  <footer class="w-full bg-amber-900 text-white py-6 mt-12">
+    <div class="text-center text-sm">© 2025 Niyantri Coffee. All rights reserved.</div>
+  </footer>
+
+  <script>
+    const menuItems = [
+      { id: 'espresso', name: 'Espresso', price: 3.50, description: 'Bold and clean, single shot.', image: 'https://images.unsplash.com/photo-1622185560353-0368158b915e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3ODkyNDZ8MHwxfHNlYXJjaHw3fHxhJTIwY2xvc2UtdXAlMjBvZiUyMGVzcHJlc3NvJTIwY3JlbWElMjBpbiUyMGElMjB3aGl0ZSUyMGN1cHxlbnwwfDB8fHwxNzU2NzA4MDk2fDA&ixlib=rb-4.1.0&q=80&w=1080' },
+      { id: 'latte', name: 'Latte', price: 4.50, description: 'Silky milk with a hint of vanilla.', image: 'https://images.pexels.com/photos/6205582/pexels-photo-6205582.jpeg?auto=compress&cs=tinysrgb&h=650&w=940' },
+      { id: 'cappuccino', name: 'Cappuccino', price: 4.75, description: 'Creamy foam crown with rich espresso.', image: 'https://images.unsplash.com/photo-1544281474-bdf3e12f871f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3ODkyNDZ8MHwxfHNlYXJjaHwzfHxjYXBwdWNjaW5vJTIwd2l0aCUyMGZyb3RoeSUyMG1pbGt8ZW58MHwwfHx8MTc1NjcwODA5N3ww&ixlib=rb-4.1.0&q=80&w=1080' },
+      { id: 'coldbrew', name: 'Cold Brew', price: 4.25, description: 'Smooth and bold, served chilled.', image: 'https://images.unsplash.com/photo-1676999279690-f1ebac70e6a8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3ODkyNDZ8MHwxfHNlYXJjaHwzfHxjb2xkJTIwYnJldyUyMGdsYXNzJTIwd2l0aCUyMGljZXxlbnwwfDB8fHwxNzU2NzA4MDk4fDA&ixlib=rb-4.1.0&q=80&w=1080' },
+      { id: 'mocha', name: 'Mocha', price: 5.25, description: 'Chocolate tucked into coffee bliss.', image: 'https://pixabay.com/get/gcfd9ef5c2b3be842fa55c6e97b9f045e9b62f6f6efb02c39ba12b6191d981a0496314b37017c28c0e0a541ba845c9b75_640.jpg' },
+      { id: 'flatwhite', name: 'Flat White', price: 4.00, description: 'Velvety microfoam over espresso.', image: 'https://pixabay.com/get/g0bb63d0af81391f7b12a038cebfabb67c8e8070f638c10f2b66c3d3e712e4df75ef527082449d17b5309983b1548f8ee4d4d4da2b7e251141761dee6c70785ec_640.jpg' }
+    ];
+
+    const grid = document.getElementById('menu-grid');
+    menuItems.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'bg-white rounded-lg shadow p-4 hover:shadow-lg transition';
+      card.innerHTML = `
+        <img src="${item.image}" alt="${item.name}" class="w-full h-40 object-cover rounded mb-2" />
+        <div class="flex justify-between items-center mb-1">
+          <div class="text-sm font-semibold">${item.name}</div>
+          <div class="text-sm text-amber-700 font-semibold">$${item.price.toFixed(2)}</div>
+        </div>
+        <div class="text-xs text-gray-500 mb-2">${item.description}</div>
+        <button class="w-full py-2 rounded bg-amber-600 text-white font-semibold hover:bg-amber-500 transition" onclick="addToCartFromItem('${item.id}')">Add to Cart</button>
+      `;
+      grid.appendChild(card);
+    });
+
+    // Simple cart management
+    const addToCartFromItem = (id) => {
+      const item = menuItems.find(m => m.id === id);
+      if (!item) return;
+      let cart = JSON.parse(localStorage.getItem('ny_cart') || '[]');
+      const existing = cart.find(i => i.id === item.id);
+      if (existing) existing.qty += 1; else cart.push({ id: item.id, name: item.name, price: item.price, qty: 1 });
+      localStorage.setItem('ny_cart', JSON.stringify(cart));
+      alert(item.name + ' added to cart');
+    };
+  </script>
+</body>
+</html>
